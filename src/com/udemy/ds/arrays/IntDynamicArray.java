@@ -8,6 +8,7 @@ public class IntDynamicArray {
 
 	/**
 	 * Constructor to create a dynamic array with a specified initial capacity
+	 * 
 	 * @param capacity
 	 */
 	public IntDynamicArray(int capacity) {
@@ -24,18 +25,18 @@ public class IntDynamicArray {
 	public IntDynamicArray() {
 		this(DEFAULT_CAPACITY);
 	}
-	
+
 	/**
 	 * Constructor to create a dynamic array with the specified static array
+	 * 
 	 * @param staticArray
 	 */
 	public IntDynamicArray(int[] staticArray) {
 		this.length = staticArray.length;
 		this.array = staticArray;
-		if(staticArray.length<=DEFAULT_CAPACITY) {
+		if (staticArray.length <= DEFAULT_CAPACITY) {
 			this.capacity = DEFAULT_CAPACITY;
-		}
-		else {
+		} else {
 			this.capacity = staticArray.length;
 		}
 	}
@@ -119,6 +120,9 @@ public class IntDynamicArray {
 	 * @param index
 	 */
 	public void insert(int element, int index) {
+		if(length == 0) {
+			throw new IllegalArgumentException("Insertion not possible into empty array");
+		}
 		if (index > this.length - 1 || index < 0) {
 			throw new IllegalArgumentException("Illegal Index: " + index);
 		}
@@ -184,51 +188,66 @@ public class IntDynamicArray {
 	 * @param index
 	 * @return
 	 */
+	/*
+	 * Removes the element at specified index by shifting elements to the left to
+	 * fill the gap and then copying the array elements into a new array
+	 */
 	public int removeAt(int index) {
 		if (index < 0 || index > length - 1) {
-			throw new IllegalArgumentException("Index: " + index+" out of bounds");
+			throw new IllegalArgumentException("Index: " + index + " out of bounds");
 		} else {
 			int value = array[index];
 			int i = index;
-			while (i < length-1) {
+			while (i < length - 1) {
 				array[i] = array[i + 1];
 				i++;
 			}
-			array[i]=0;
-			length = length -1;
+			array[i] = 0;
+			length = length - 1;
 			int[] new_array = new int[length];
-			i=0;
-			int j =0;
-			while(i<length) {
-				new_array[i++]= array[j++];
+			i = 0;
+			int j = 0;
+			while (i < length) {
+				new_array[i++] = array[j++];
 			}
-			array=new_array;
+			array = new_array;
 			return value;
 		}
 	}
 
 	/**
-	 * Removes the specified element if exists and returns true otherwise returns false 
+	 * Removes the specified element if exists and returns true otherwise returns
+	 * false
 	 * 
 	 * @param element
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public boolean remove(int element) {
 		int index = indexOf(element);
-		if(index == -1) {
+		if (index == -1) {
 			return false;
 		}
 		removeAt(index);
 		return true;
 	}
-	
+
 	/**
 	 * Returns the array as a static array
+	 * 
 	 * @return
 	 */
 	public int[] toStaticArray() {
-		return this.array;
+		if(length == 0) {
+			return null;
+		}
+		int[] result = new int[length];
+		int i =0;
+		int j =0;
+		while(i<length) {
+			result[i++] = array[j++];
+		}
+		return result;
 	}
 
 	@Override
